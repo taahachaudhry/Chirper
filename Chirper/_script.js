@@ -7,10 +7,16 @@ Chirper.chirps = [];
 Chirper.Chirp = function (name, message) {
     this.name = name;
     this.message = message;
-    this.timestamp = timestamp;
+    this.timestamp = Date.now();
 }
 //CRUD functions with AJAX call to Firebase
-Chirper.create = function () { };
+Chirper.create = function () {
+    var name = "Taaha Chaudhry";
+    var message = document.getElementById('chirp');
+
+    var chirp = new Chirper.Chirp(name, message.value);
+    Chirper.ajax("POST", Chirper.urlHelper(Chirper.base, "chirps"), chirp, function () { console.log("success");})
+};
 Chirper.read = function () { };
 Chirper.edit = function () { };
 Chirper.save = function () { };
@@ -20,7 +26,7 @@ Chirper.delete = function () { };
 Chirper.output = function () { };
 
 //URL Helper for Firebase
-Chiper.urlHelper = function (base) {
+Chirper.urlHelper = function (base) {
     var url = "https://" + base + ".firebaseio.com/";
     for (var i = 1; i < arguments.length; i++) {
         url += arguments[i] + '/'
