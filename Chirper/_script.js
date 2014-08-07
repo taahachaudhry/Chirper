@@ -15,9 +15,20 @@ Chirper.create = function () {
     var message = document.getElementById('chirp');
 
     var chirp = new Chirper.Chirp(name, message.value);
-    Chirper.ajax("POST", Chirper.urlHelper(Chirper.base, "chirps"), chirp, function () { console.log("success");})
+    Chirper.ajax("POST", Chirper.urlHelper(Chirper.base, "chirps"), chirp, function () { Chirper.read();})
 };
-Chirper.read = function () { };
+Chirper.read = function () {
+    Chirper.chirps = [];
+    Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, 'chirps'), null, function (data) {
+        for (var i in data) {
+            var chirp = new Chirper.Chirp(data[i].name, data[i].message);
+            chirp.key = i;
+            Chirper.chirps.push(chirp);
+        }
+        //Chirper.output();
+        console.log("success");
+    });
+};
 Chirper.edit = function () { };
 Chirper.save = function () { };
 Chirper.delete = function () { };
