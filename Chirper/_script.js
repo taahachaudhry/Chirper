@@ -20,4 +20,32 @@ Chirper.delete = function () { };
 Chirper.output = function () { };
 
 //URL Helper for Firebase
+Chiper.urlHelper = function (base) {
+    var url = "https://" + base + ".firebaseio.com/";
+    for (var i = 1; i < arguments.length; i++) {
+        url += arguments[i] + '/'
+    }
+    return url + ".json";
+};
 //AJAX Call Function
+Chirper.ajax = function (method, url, data, success, error) {
+    var request = new XMLHttpRequest();
+    request.open(method, url);
+    request.onload = function () {
+        if (this.status >= 200 && this.status < 400) {
+            success(JSON.parse(this.response));
+        } else {
+            console.log("Error on " + method);
+            error();
+        }
+    };
+    request.onerror = function () {
+        console.log("Communication error");
+        error();
+    }
+    if (data) {
+        request.send(JSON.stringify(data));
+    } else {
+        request.send();
+    }
+}
