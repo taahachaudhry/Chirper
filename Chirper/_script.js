@@ -2,6 +2,7 @@
 //Firebase base
 Chirper.base = "htcchirper";
 
+/*************** CHIRPS ****************/
 //Array of chirps and Chirp object
 Chirper.chirps = [];
 Chirper.Chirp = function (name, message) {
@@ -10,6 +11,7 @@ Chirper.Chirp = function (name, message) {
     this.timestamp = Date.now();
 }
 Chirper.Chirp.prototype.editing = false;
+
 //CRUD functions with AJAX call to Firebase
 Chirper.create = function () {
     var name = "Taaha Chaudhry";
@@ -36,7 +38,12 @@ Chirper.edit = function (index) {
     Chirper.chirps[index].editing = true;
     Chirper.output();
 };
-Chirper.save = function () { };
+Chirper.save = function (index) {
+    var name = "Taaha Chaudhry"
+    var message = document.getElementById('editChirp').value;
+    var chirp = new Chirper.Chirp(name, message);
+    Chirper.ajax("PATCH", Chirper.urlHelper(Chirper.base, 'chirps', Chirper.chirps[index].key), chirp, function () { Chirper.read();})
+};
 Chirper.delete = function (index) {
     Chirper.ajax("DELETE", Chirper.urlHelper(Chirper.base, "chirps", Chirper.chirps[index].key), null, function () { Chirper.read();})
 };
@@ -46,12 +53,12 @@ Chirper.output = function () {
     var h = "";
     for (var i in Chirper.chirps) {
         if (Chirper.chirps[i].editing) {
-            h += "<textarea id='editChirp' class='form-control' value='" + Chirper.chirps[i].message + "'></textarea><br>";
+            h += "<textarea id='editChirp' class='form-control'>"+ Chirper.chirps[i].message +"</textarea>";
             h += "<div class='btn btn-success btn-xs' onclick='Chirper.save(" + i + ")'><i class='fa fa-edit'></i></div>";
         } else {
             h += '<td><h4> "' + Chirper.chirps[i].message + '"</h4><h6> –' + Chirper.chirps[i].name + '</h6></td>';
-            h += "<td><div class='btn btn-warning btn-xs' style='margin-top:20px' onclick='Chirper.edit(" + i + ")'><i class='fa fa-edit'></i></div></td>";
-            h += "<td><div class='btn btn-danger btn-xs' style='margin-top:20px' onclick='Chirper.delete(" + i + ")'><span class='glyphicon glyphicon-eject'></div></td>";
+            h += "<td><div class='btn btn-warning btn-sm' style='margin-top:20px' onclick='Chirper.edit(" + i + ")'><i class='fa fa-edit'></i></div></td>";
+            h += "<td><div class='btn btn-danger btn-sm' style='margin-top:20px' onclick='Chirper.delete(" + i + ")'><span class='glyphicon glyphicon-eject'></div></td>";
             h += "<tbody><tr>"
         }
     }
@@ -59,6 +66,8 @@ Chirper.output = function () {
     document.getElementById('chirpFeed').innerHTML = h;
     document.getElementById('editType').value = type;
 };
+
+/*************** END CHIRPS ****************/
 
 //URL Helper for Firebase
 Chirper.urlHelper = function (base) {
@@ -90,4 +99,5 @@ Chirper.ajax = function (method, url, data, success, error) {
         request.send();
     }
 }
+//Read onload
 Chirper.read();
