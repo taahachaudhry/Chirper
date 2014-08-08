@@ -39,7 +39,11 @@
     </nav>
     <div class="container">
         <div class="row clearfix">
-            <div class="col-md-3 column">
+            <div class="col-md-3" id="clearLogin">
+                <input type='text' id='name' class='form-control' placeholder='Name' /><br>
+                <input type='text' id='image' class='form-control' placeholder='Image URL' /><br>
+                <textarea id='bio' class='form-control' placeholder='Bio'></textarea><br>
+                <button class="btn btn-primary btn-med btn-block" onclick="Chirper.createProfile();">Sign Up</button>
                 <table id="userProfile" class="table table-striped table-bordered"></table>
             </div>
             <div class="col-md-6">

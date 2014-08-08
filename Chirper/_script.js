@@ -79,14 +79,25 @@ Chirper.Profile = function (name, image, bio) {
 }
 
 //CRUD functions for user profile
-Chirper.createProfile = function () { };
-Chirper.readProfile = function () { };
+Chirper.createProfile = function () {
+    var name = document.getElementById('name');
+    var image = document.getElementById('image');
+    var bio = document.getElementById('bio');
+
+    var profile = new Chirper.Profile(name.value, image.value, bio.value);
+    Chirper.ajax("POST", Chirper.urlHelper(Chirper.base, "profile"), profile, function () { Chirper.readProfile();})
+};
+Chirper.readProfile = function () {
+    document.getElementById('clearLogin').innerHTML = '';
+};
 Chirper.editProfile = function () { };
 Chirper.saveProfile = function () { };
 Chirper.deleteProfile = function () { };
 
 //Table displaying profile
-Chirper.displayProfile = function () { };
+Chirper.displayProfile = function () {
+    
+};
 /*************** END USER PROFILE ****************/
 
 //URL Helper for Firebase
