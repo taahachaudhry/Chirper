@@ -69,6 +69,26 @@ Chirper.output = function () {
 
 /*************** END CHIRPS ****************/
 
+/*************** USER PROFILE ****************/
+//User array and profile -> there will only be one user in the array 
+Chirper.user = [];
+Chirper.Profile = function (name, image, bio) {
+    this.name = name;
+    this.image = image;
+    this.bio = bio;
+}
+
+//CRUD functions for user profile
+Chirper.createProfile = function () { };
+Chirper.readProfile = function () { };
+Chirper.editProfile = function () { };
+Chirper.saveProfile = function () { };
+Chirper.deleteProfile = function () { };
+
+//Table displaying profile
+Chirper.displayProfile = function () { };
+/*************** END USER PROFILE ****************/
+
 //URL Helper for Firebase
 Chirper.urlHelper = function (base) {
     var url = "https://" + base + ".firebaseio.com/";
