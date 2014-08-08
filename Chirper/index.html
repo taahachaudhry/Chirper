@@ -29,7 +29,7 @@
                             <textarea id="chirp" class="form-control" placeholder="Enter a New Chirp"></textarea> <br />
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" >Close</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             <button type="button" class="btn btn-primary" onclick="Chirper.create();" data-dismiss="modal">Chirp</button>
                         </div>
                     </div>
@@ -56,6 +56,7 @@
 
     <script src="Scripts/jquery-1.9.0.min.js"></script>
     <script src="Scripts/bootstrap.min.js"></script>
+    <script src="_authtoken.js"></script>
     <script src="_script.js"></script>
 </body>
 </html>

@@ -18,7 +18,12 @@ Chirper.create = function () {
     var message = document.getElementById('chirp');
 
     var chirp = new Chirper.Chirp(name, message.value);
-    Chirper.ajax("POST", Chirper.urlHelper(Chirper.base, "chirps"), chirp, function () { Chirper.read(); message.value = '';})
+    Chirper.ajax("POST", Chirper.urlHelper(Chirper.base, "chirps"), chirp, function (data) {
+        chirp.key = data.name;
+        Chirper.chirps.push(chirp);
+        message.value = '';
+        Chirper.output();
+    })
 };
 Chirper.chirps = [];
 
@@ -87,7 +92,11 @@ Chirper.createProfile = function () {
     var bio = document.getElementById('bio');
 
     var profile = new Chirper.Profile(name.value, image.value, bio.value);
-    Chirper.ajax("POST", Chirper.urlHelper(Chirper.base, "profile"), profile, function () { Chirper.readProfile();})
+    Chirper.ajax("POST", Chirper.urlHelper(Chirper.base, "profile"), profile, function (data) {
+        profile.key = data.name;
+        Chirper.user.push(profile);
+        Chirper.output();
+    })
 };
 Chirper.user = [];
 
@@ -143,7 +152,7 @@ Chirper.urlHelper = function (base) {
     for (var i = 1; i < arguments.length; i++) {
         url += arguments[i] + '/'
     }
-    return url + ".json";
+    return url + ".json?auth="+ChirperKey.fb_key;
 };
 //AJAX Call Function
 Chirper.ajax = function (method, url, data, success, error) {
