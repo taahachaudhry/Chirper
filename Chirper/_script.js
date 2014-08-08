@@ -50,7 +50,7 @@ Chirper.save = function (index) {
         chirp.key = Chirper.chirps[index].key;
         Chirper.chirps[index] = chirp;
         Chirper.output();
-    })
+    });
 };
 Chirper.delete = function (index) {
     Chirper.ajax("DELETE", Chirper.urlHelper(Chirper.base, "chirps", Chirper.chirps[index].key), null, function () { Chirper.chirps.splice(index,1); Chirper.output();})
@@ -96,7 +96,7 @@ Chirper.createProfile = function () {
     Chirper.ajax("POST", Chirper.urlHelper(Chirper.base, "profile"), profile, function (data) {
         profile.key = data.name;
         Chirper.user.push(profile);
-        Chirper.output();
+        Chirper.displayProfile();
     })
 };
 Chirper.user = [];
@@ -131,7 +131,7 @@ Chirper.saveProfile = function (index) {
 };
 Chirper.deleteProfile = function (index) {
     Chirper.ajax("DELETE", Chirper.urlHelper(Chirper.base, "profile", Chirper.user[index].key), null, function () {
-        Chirper.user.splice(index, 1); Chirper.displayProfile();
+        Chirper.user.splice(index, 1); Chirper.displayProfile(); 
     })
 };
 
