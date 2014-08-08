@@ -20,8 +20,9 @@ Chirper.create = function () {
     var chirp = new Chirper.Chirp(name, message.value);
     Chirper.ajax("POST", Chirper.urlHelper(Chirper.base, "chirps"), chirp, function () { Chirper.read(); message.value = '';})
 };
+Chirper.chirps = [];
+
 Chirper.read = function () {
-    Chirper.chirps = [];
     Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, 'chirps'), null, function (data) {
         for (var i in data) {
             var chirp = new Chirper.Chirp(data[i].name, data[i].message);
@@ -45,7 +46,7 @@ Chirper.save = function (index) {
     Chirper.ajax("PATCH", Chirper.urlHelper(Chirper.base, 'chirps', Chirper.chirps[index].key), chirp, function () { Chirper.read();})
 };
 Chirper.delete = function (index) {
-    Chirper.ajax("DELETE", Chirper.urlHelper(Chirper.base, "chirps", Chirper.chirps[index].key), null, function () { Chirper.read();})
+    Chirper.ajax("DELETE", Chirper.urlHelper(Chirper.base, "chirps", Chirper.chirps[index].key), null, function () { Chirper.chirps.splice(index,1); Chirper.output();})
 };
 
 //Table outputting chirps
@@ -77,6 +78,7 @@ Chirper.Profile = function (name, image, bio) {
     this.image = image;
     this.bio = bio;
 }
+Chirper.Profile.prototype.editing = false;
 
 //CRUD functions for user profile
 Chirper.createProfile = function () {
@@ -87,8 +89,10 @@ Chirper.createProfile = function () {
     var profile = new Chirper.Profile(name.value, image.value, bio.value);
     Chirper.ajax("POST", Chirper.urlHelper(Chirper.base, "profile"), profile, function () { Chirper.readProfile();})
 };
+Chirper.user = [];
+
 Chirper.readProfile = function () {
-    Chirper.user = [];
+    
     Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, 'profile'), null, function (data) {
         for (var i in data) {
             var profile = new Chirper.Profile(data[i].name, data[i].image, data[i].bio);
@@ -98,11 +102,17 @@ Chirper.readProfile = function () {
         Chirper.displayProfile();
     });
 };
-Chirper.editProfile = function () { };
+Chirper.editProfile = function () {
+    for (var i in Chirper.user) {
+        Chirper.user[i].editing = false;
+    }
+    Chirper.user[i].editing = true;
+    Chirper.displayProfile();
+};
 Chirper.saveProfile = function () { };
 Chirper.deleteProfile = function (index) {
     Chirper.ajax("DELETE", Chirper.urlHelper(Chirper.base, "profile", Chirper.user[index].key), null, function () {
-        Chirper.readProfile(); 
+        Chirper.user.splice(index, 1); Chirper.displayProfile();
     })
 };
 
@@ -115,6 +125,7 @@ Chirper.displayProfile = function () {
         document.getElementById('clearLogin').innerHTML = '';
         h += '<tbody><tr>';
         for (var i in Chirper.user) {
+            //if (Chirper.)
             h += "<img src='" + Chirper.user[i].image + "' class='img-thumbnail img-responsive center-block' style='height:200px; width:200px;'/>"
             h += '<td><h3 style="text-align:center">' + Chirper.user[i].name + '</h3></td><td><h5 style="text-align:center"> ' + Chirper.user[i].bio + '</h5></td>';
             h += "<td><div style='margin-bottom:5px' class='btn btn-warning btn-sm center-block' onclick='Chirper.editProfile(" + i + ")'><i class='fa fa-edit'></i></div></td>";
