@@ -100,7 +100,6 @@ Chirper.createProfile = function () {
 };
 
 Chirper.readProfile = function () {
-    
     Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, 'profile'), null, function (data) {
         for (var i in data) {
             var profile = data[i];
@@ -164,13 +163,26 @@ Chirper.displayProfile = function () {
 //Friends array and Friend Object
 Chirper.friends = [];
 Chirper.Friend = function (name, base) {
-    this.name=name;
-    this.base=name;
+    this.name = name;
+    this.base = base;
 }
 
+//Add friend
 Chirper.addFriend = function () {
-
+    var friendBase = document.getElementById('base').value;
+    console.log(friendBase)
+    Chirper.ajax("GET", Chirper.urlHelper(friendBase,"profile"), null, function (data) {
+        for (var i in data) {
+            console.log(data[i].name);
+            var friend = new Chirper.Friend(data[i].name, friendBase);
+            friend.key = i;
+            friend.__proto__ = Chirper.Friend.prototype;
+            Chirper.friends.push(friend);
+        }
+        //Chirper.displayFriends();
+    }, function(){ console.log("error");});
 }
+
 /*************** END USER FRIENDS ****************/
 
 //URL Helper for Firebase
@@ -179,7 +191,11 @@ Chirper.urlHelper = function (base) {
     for (var i = 1; i < arguments.length; i++) {
         url += arguments[i] + '/'
     }
-    return url + ".json?auth="+ChirperKey.fb_key;
+    if (base === 'htcchirper') {
+        return url + ".json?auth="+ChirperKey.fb_key;
+    } else {
+        return url + ".json";
+    }
 };
 //AJAX Call Function
 Chirper.ajax = function (method, url, data, success, error) {
