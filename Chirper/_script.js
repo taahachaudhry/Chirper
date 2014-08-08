@@ -56,10 +56,10 @@ Chirper.output = function () {
             h += "<textarea id='editChirp' class='form-control'>"+ Chirper.chirps[i].message +"</textarea>";
             h += "<div class='btn btn-success btn-xs' onclick='Chirper.save(" + i + ")'><i class='fa fa-edit'></i></div>";
         } else {
+            h += "<tbody><tr>"
             h += '<td><h4> "' + Chirper.chirps[i].message + '"</h4><h6> –' + Chirper.chirps[i].name + '</h6></td>';
             h += "<td><div class='btn btn-warning btn-sm' style='margin-top:20px' onclick='Chirper.edit(" + i + ")'><i class='fa fa-edit'></i></div></td>";
             h += "<td><div class='btn btn-danger btn-sm' style='margin-top:20px' onclick='Chirper.delete(" + i + ")'><span class='glyphicon glyphicon-eject'></div></td>";
-            h += "<tbody><tr>"
         }
     }
     h += "</tbody></tr>"
@@ -88,7 +88,15 @@ Chirper.createProfile = function () {
     Chirper.ajax("POST", Chirper.urlHelper(Chirper.base, "profile"), profile, function () { Chirper.readProfile();})
 };
 Chirper.readProfile = function () {
-    document.getElementById('clearLogin').innerHTML = '';
+    Chirper.user = [];
+    Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, 'profile'), null, function (data) {
+        for (var i in data) {
+            var profile = new Chirper.Profile(data[i].name, data[i].image, data[i].bio);
+            profile.key = i;
+            Chirper.user.push(profile);
+        }
+        Chirper.displayProfile();
+    });
 };
 Chirper.editProfile = function () { };
 Chirper.saveProfile = function () { };
@@ -96,7 +104,21 @@ Chirper.deleteProfile = function () { };
 
 //Table displaying profile
 Chirper.displayProfile = function () {
-    
+    var h = '<table class="table table-striped table-bordered"></table>'    
+    if (Chirper.user.length === 0) {
+        document.getElementById('clearLogin');
+    } else {
+        document.getElementById('clearLogin').innerHTML = '';
+        h += '<tbody><tr>';
+        for (var i in Chirper.user) {
+            h += "<img src='" + Chirper.user[i].image + "' class='img-thumbnail img-responsive center-block' style='height:200px; width:200px;'/>"
+            h += '<td><h3 style="text-align:center">' + Chirper.user[i].name + '</h3></td><td><h5 style="text-align:center"> ' + Chirper.user[i].bio + '</h5></td>';
+            h += "<td><div style='margin-bottom:5px' class='btn btn-warning btn-sm center-block' onclick='Chirper.editProfile(" + i + ")'><i class='fa fa-edit'></i></div></td>";
+            h += "<td><div class='btn btn-danger btn-sm center-block' onclick='Chirper.deleteProfile(" + i + ")'><span class='glyphicon glyphicon-eject'></div></td>";
+        }
+        h += "</tbody></tr>"
+        document.getElementById('clearLogin').innerHTML = h;
+    }
 };
 /*************** END USER PROFILE ****************/
 
