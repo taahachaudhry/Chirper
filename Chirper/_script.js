@@ -170,7 +170,7 @@ Chirper.Friend = function (name, base) {
 //Add friend
 Chirper.addFriend = function () {
     var friendBase = document.getElementById('base').value;
-    console.log(friendBase)
+    console.log(friendBase);
     Chirper.ajax("GET", Chirper.urlHelper(friendBase,"profile"), null, function (data) {
         for (var i in data) {
             console.log(data[i].name);
@@ -179,10 +179,15 @@ Chirper.addFriend = function () {
             friend.__proto__ = Chirper.Friend.prototype;
             Chirper.friends.push(friend);
         }
-        //Chirper.displayFriends();
+        Chirper.sendFriend(friend);
     }, function(){ console.log("error");});
 }
-
+//Send friend to firebase
+Chirper.sendFriend = function (friend) {
+    Chirper.ajax("POST", Chirper.urlHelper(Chirper.base, "friends"), friend, function () {
+        console.log("successful");
+    })
+}
 /*************** END USER FRIENDS ****************/
 
 //URL Helper for Firebase
