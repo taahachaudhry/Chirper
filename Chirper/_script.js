@@ -100,7 +100,11 @@ Chirper.readProfile = function () {
 };
 Chirper.editProfile = function () { };
 Chirper.saveProfile = function () { };
-Chirper.deleteProfile = function () { };
+Chirper.deleteProfile = function (index) {
+    Chirper.ajax("DELETE", Chirper.urlHelper(Chirper.base, "profile", Chirper.user[index].key), null, function () {
+        Chirper.readProfile(); 
+    })
+};
 
 //Table displaying profile
 Chirper.displayProfile = function () {
