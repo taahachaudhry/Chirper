@@ -71,7 +71,6 @@ Chirper.output = function () {
     }
     h += "</tbody></tr>"
     document.getElementById('chirpFeed').innerHTML = h;
-    document.getElementById('editType').value = type;
 };
 
 /*************** END CHIRPS ****************/
@@ -113,11 +112,8 @@ Chirper.readProfile = function () {
         Chirper.displayProfile();
     });
 };
-Chirper.editProfile = function () {
-    for (var i in Chirper.user) {
-        Chirper.user[i].editing = false;
-    }
-    Chirper.user[i].editing = true;
+Chirper.editProfile = function (index) {
+    Chirper.user[index].editing = true;
     Chirper.displayProfile();
 };
 Chirper.saveProfile = function () { };
@@ -136,11 +132,17 @@ Chirper.displayProfile = function () {
         document.getElementById('clearLogin').innerHTML = '';
         h += '<tbody><tr>';
         for (var i in Chirper.user) {
-            //if (Chirper.)
-            h += "<img src='" + Chirper.user[i].image + "' class='img-thumbnail img-responsive center-block' style='height:200px; width:200px;'/>"
-            h += '<td><h3 style="text-align:center">' + Chirper.user[i].name + '</h3></td><td><h5 style="text-align:center"> ' + Chirper.user[i].bio + '</h5></td>';
-            h += "<td><div style='margin-bottom:5px' class='btn btn-warning btn-sm center-block' onclick='Chirper.editProfile(" + i + ")'><i class='fa fa-edit'></i></div></td>";
-            h += "<td><div class='btn btn-danger btn-sm center-block' onclick='Chirper.deleteProfile(" + i + ")'><span class='glyphicon glyphicon-eject'></div></td>";
+            if (Chirper.user[i].editing) {
+                h += "<td><input type='text' id='editName' class='form-control' value='" + Chirper.user[i].name + "'/></td><br>";
+                h += "<td><input type='text' id='editImg' class='form-control' value='" + Chirper.user[i].image + "'/></td><br>";
+                h += "<td><textarea id='editName' class='form-control'>"+ Chirper.user[i].bio + "</textarea></td><br>";
+                h += "<td><div style='margin-bottom:5px' class='btn btn-success btn-sm center-block' onclick='Chirper.saveProfile(" + i + ")'><i class='fa fa-save'></i></div></td>";
+            } else {
+                h += "<td><img src='" + Chirper.user[i].image + "' class='img-thumbnail img-responsive center-block' style='height:200px; width:200px;'/><td>"
+                h += '<td><h3 style="text-align:center">' + Chirper.user[i].name + '</h3></td><td><h5 style="text-align:center"> ' + Chirper.user[i].bio + '</h5></td>';
+                h += "<td><div style='margin-bottom:5px' class='btn btn-warning btn-sm center-block' onclick='Chirper.editProfile(" + i + ")'><i class='fa fa-edit'></i></div></td>";
+                h += "<td><div class='btn btn-danger btn-sm center-block' onclick='Chirper.deleteProfile(" + i + ")'><span class='glyphicon glyphicon-eject'></div></td>";
+            }
         }
         h += "</tbody></tr>"
         document.getElementById('clearLogin').innerHTML = h;
