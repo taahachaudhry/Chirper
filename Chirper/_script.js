@@ -30,9 +30,10 @@ Chirper.chirps = [];
 Chirper.read = function () {
     Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, 'chirps'), null, function (data) {
         for (var i in data) {
-            var chirp = new Chirper.Chirp(data[i].name, data[i].message);
+            var chirp = data[i];
+            chirp.__proto__ = Chirper.Chirp.prototype;
             chirp.key = i;
-            Chirper.chirps.push(chirp);
+            Chirper.chirps.push(chirp)
         }
         Chirper.output();
     });
@@ -104,7 +105,8 @@ Chirper.readProfile = function () {
     
     Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, 'profile'), null, function (data) {
         for (var i in data) {
-            var profile = new Chirper.Profile(data[i].name, data[i].image, data[i].bio);
+            var profile = data[i];
+            profile.__proto__ = Chirper.Profile.prototype;
             profile.key = i;
             Chirper.user.push(profile);
         }
