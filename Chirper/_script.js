@@ -25,8 +25,7 @@ Chirper.read = function () {
             chirp.key = i;
             Chirper.chirps.push(chirp);
         }
-        //Chirper.output();
-        console.log("success");
+        Chirper.output();
     });
 };
 Chirper.edit = function () { };
@@ -34,7 +33,17 @@ Chirper.save = function () { };
 Chirper.delete = function () { };
 
 //Table outputting chirps
-Chirper.output = function () { };
+Chirper.output = function () {
+    var h = "";
+    for (var i in Chirper.chirps) {
+        h += "<tbody><tr>"
+        h += '<td><h4> "' + Chirper.chirps[i].message + '"</h4><h6> –' + Chirper.chirps[i].name + '</h6></td>';
+        h += "<td><div class='btn btn-warning btn-xs' style='margin-top:20px' onclick='app.edit(" + i + ")'><i class='fa fa-edit'></i></div></td>";
+        h += "<td><div class='btn btn-danger btn-xs' style='margin-top:20px' onclick='app.delete(" + i + ")'><span class='glyphicon glyphicon-eject'></div></td>";
+    }
+    h += "</tbody></tr>"
+    document.getElementById('chirpFeed').innerHTML = h;
+};
 
 //URL Helper for Firebase
 Chirper.urlHelper = function (base) {
