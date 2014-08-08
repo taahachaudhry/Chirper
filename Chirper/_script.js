@@ -14,7 +14,7 @@ Chirper.Chirp.prototype.editing = false;
 
 //CRUD functions with AJAX call to Firebase
 Chirper.create = function () {
-    var name = "Taaha Chaudhry";
+    var name = Chirper.user[0].name;
     var message = document.getElementById('chirp');
 
     var chirp = new Chirper.Chirp(name, message.value);
@@ -39,17 +39,18 @@ Chirper.read = function () {
     });
 };
 Chirper.edit = function (index) {
-    for (var i in Chirper.chirps) {
-        Chirper.chirps[i].editing = false;
-    }
     Chirper.chirps[index].editing = true;
     Chirper.output();
 };
 Chirper.save = function (index) {
-    var name = "Taaha Chaudhry"
+    var name = Chirper.user[0].name;
     var message = document.getElementById('editChirp').value;
     var chirp = new Chirper.Chirp(name, message);
-    Chirper.ajax("PATCH", Chirper.urlHelper(Chirper.base, 'chirps', Chirper.chirps[index].key), chirp, function () { Chirper.read();})
+    Chirper.ajax("PATCH", Chirper.urlHelper(Chirper.base, 'chirps', Chirper.chirps[index].key), chirp, function () {
+        chirp.key = Chirper.chirps[index].key;
+        Chirper.chirps[index] = chirp;
+        Chirper.output();
+    })
 };
 Chirper.delete = function (index) {
     Chirper.ajax("DELETE", Chirper.urlHelper(Chirper.base, "chirps", Chirper.chirps[index].key), null, function () { Chirper.chirps.splice(index,1); Chirper.output();})
