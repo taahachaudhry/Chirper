@@ -25,7 +25,6 @@ Chirper.create = function () {
         Chirper.output();
     })
 };
-Chirper.chirps = [];
 
 Chirper.read = function () {
     Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, 'chirps'), null, function (data) {
@@ -99,7 +98,6 @@ Chirper.createProfile = function () {
         Chirper.displayProfile();
     })
 };
-Chirper.user = [];
 
 Chirper.readProfile = function () {
     
@@ -161,6 +159,19 @@ Chirper.displayProfile = function () {
     }
 };
 /*************** END USER PROFILE ****************/
+
+/*************** USER FRIENDS ****************/
+//Friends array and Friend Object
+Chirper.friends = [];
+Chirper.Friend = function (name, base) {
+    this.name=name;
+    this.base=name;
+}
+
+Chirper.addFriend = function () {
+
+}
+/*************** END USER FRIENDS ****************/
 
 //URL Helper for Firebase
 Chirper.urlHelper = function (base) {
