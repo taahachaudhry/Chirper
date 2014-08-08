@@ -154,3 +154,4 @@ Chirper.ajax = function (method, url, data, success, error) {
 }
 //Read onload
 Chirper.read();
+Chirper.readProfile();
