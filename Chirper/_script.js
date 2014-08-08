@@ -116,7 +116,18 @@ Chirper.editProfile = function (index) {
     Chirper.user[index].editing = true;
     Chirper.displayProfile();
 };
-Chirper.saveProfile = function () { };
+Chirper.saveProfile = function (index) {
+    delete Chirper.user[index].editing;
+    var name = document.getElementById('editName').value;
+    var image = document.getElementById('editImg').value;
+    var bio = document.getElementById('editBio').value;
+    var profile = new Chirper.Profile(name, image, bio);
+    Chirper.ajax("PUT", Chirper.urlHelper(Chirper.base, "profile", Chirper.user[index].key), profile, function () {
+        profile.key = Chirper.user[index].key;
+        Chirper.user[index] = profile;
+        Chirper.displayProfile();
+    })
+};
 Chirper.deleteProfile = function (index) {
     Chirper.ajax("DELETE", Chirper.urlHelper(Chirper.base, "profile", Chirper.user[index].key), null, function () {
         Chirper.user.splice(index, 1); Chirper.displayProfile();
@@ -135,7 +146,7 @@ Chirper.displayProfile = function () {
             if (Chirper.user[i].editing) {
                 h += "<td><input type='text' id='editName' class='form-control' value='" + Chirper.user[i].name + "'/></td><br>";
                 h += "<td><input type='text' id='editImg' class='form-control' value='" + Chirper.user[i].image + "'/></td><br>";
-                h += "<td><textarea id='editName' class='form-control'>"+ Chirper.user[i].bio + "</textarea></td><br>";
+                h += "<td><textarea id='editBio' class='form-control'>"+ Chirper.user[i].bio + "</textarea></td><br>";
                 h += "<td><div style='margin-bottom:5px' class='btn btn-success btn-sm center-block' onclick='Chirper.saveProfile(" + i + ")'><i class='fa fa-save'></i></div></td>";
             } else {
                 h += "<td><img src='" + Chirper.user[i].image + "' class='img-thumbnail img-responsive center-block' style='height:200px; width:200px;'/><td>"
