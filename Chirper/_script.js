@@ -71,15 +71,23 @@ Chirper.delete = function (index) {
 //Table outputting chirps
 Chirper.output = function () {
     var h = "";
-    for (var i in Chirper.chirps) {
-        if (Chirper.chirps[i].editing) {
-            h += "<textarea id='editChirp' class='form-control'>"+ Chirper.chirps[i].message +"</textarea>";
-            h += "<div class='btn btn-success btn-xs' onclick='Chirper.save(" + i + ")'><i class='fa fa-edit'></i></div>";
-        } else {
+    if (Chirper.base === 'htcchirper') {
+        for (var i in Chirper.chirps) {
+            if (Chirper.chirps[i].editing) {
+                h += "<textarea id='editChirp' class='form-control'>" + Chirper.chirps[i].message + "</textarea>";
+                h += "<div class='btn btn-success btn-xs' onclick='Chirper.save(" + i + ")'><i class='fa fa-edit'></i></div>";
+            } else {
+                h += "<tbody><tr>"
+                h += '<td><h4> "' + Chirper.chirps[i].message + '"</h4><h6> –' + Chirper.chirps[i].name + '</h6></td>';
+                h += "<td><div class='btn btn-warning btn-sm' style='margin-top:20px' onclick='Chirper.edit(" + i + ")'><i class='fa fa-edit'></i></div></td>";
+                h += "<td><div class='btn btn-danger btn-sm' style='margin-top:20px' onclick='Chirper.delete(" + i + ")'><span class='glyphicon glyphicon-remove'></div></td>";
+            }
+        }
+    }
+    else {
+        for (var i in Chirper.chirps) {
             h += "<tbody><tr>"
             h += '<td><h4> "' + Chirper.chirps[i].message + '"</h4><h6> –' + Chirper.chirps[i].name + '</h6></td>';
-            h += "<td><div class='btn btn-warning btn-sm' style='margin-top:20px' onclick='Chirper.edit(" + i + ")'><i class='fa fa-edit'></i></div></td>";
-            h += "<td><div class='btn btn-danger btn-sm' style='margin-top:20px' onclick='Chirper.delete(" + i + ")'><span class='glyphicon glyphicon-remove'></div></td>";
         }
     }
     h += "</tbody></tr>"
@@ -236,6 +244,7 @@ Chirper.friendsProfile = function (index) {
     Chirper.Profile.prototype.isMyProfile = false;
     Chirper.chirps = [];
     Chirper.read();
+    Chirper.output();
     Chirper.user = [];
 }
 /*************** END USER FRIENDS ****************/
