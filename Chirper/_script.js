@@ -66,7 +66,7 @@ Chirper.output = function () {
             h += "<tbody><tr>"
             h += '<td><h4> "' + Chirper.chirps[i].message + '"</h4><h6> –' + Chirper.chirps[i].name + '</h6></td>';
             h += "<td><div class='btn btn-warning btn-sm' style='margin-top:20px' onclick='Chirper.edit(" + i + ")'><i class='fa fa-edit'></i></div></td>";
-            h += "<td><div class='btn btn-danger btn-sm' style='margin-top:20px' onclick='Chirper.delete(" + i + ")'><span class='glyphicon glyphicon-eject'></div></td>";
+            h += "<td><div class='btn btn-danger btn-sm' style='margin-top:20px' onclick='Chirper.delete(" + i + ")'><span class='glyphicon glyphicon-remove'></div></td>";
         }
     }
     h += "</tbody></tr>"
@@ -150,7 +150,7 @@ Chirper.displayProfile = function () {
                 h += "<td><img src='" + Chirper.user[i].image + "' class='img-thumbnail img-responsive center-block' style='height:200px; width:200px;'/><td>"
                 h += '<td><h3 style="text-align:center">' + Chirper.user[i].name + '</h3></td><td><h5 style="text-align:center"> ' + Chirper.user[i].bio + '</h5></td>';
                 h += "<td><div style='margin-bottom:5px' class='btn btn-warning btn-sm center-block' onclick='Chirper.editProfile(" + i + ")'><i class='fa fa-edit'></i></div></td>";
-                h += "<td><div class='btn btn-danger btn-sm center-block' onclick='Chirper.deleteProfile(" + i + ")'><span class='glyphicon glyphicon-eject'></div></td>";
+                h += "<td><div class='btn btn-danger btn-sm center-block' onclick='Chirper.deleteProfile(" + i + ")'><i class='fa fa-minus'></i></div></td>";
             }
         }
         h += "</tbody></tr>"
@@ -213,7 +213,7 @@ Chirper.friendsTable = function () {
     h += "<tbody><tr><td><div class='form-inline'><input type='text' id='base' class='form-control' placeholder='Name' />  <button class='btn btn-primary btn-xs' onclick='Chirper.addFriend();'><i class='fa fa-plus'></i></button></div></td></tr></tbody>";
     for (var i in Chirper.friends) {
         h += "<tr><td><a onclick=''>" + Chirper.friends[i].name + "</a></td>";
-        h += "<td><div class='btn btn-danger btn-xs' onclick='Chirper.deleteFriend(" + i + ")'><span class='glyphicon glyphicon-eject'></div></td></tr>";
+        h += "<td><div class='btn btn-danger btn-xs' onclick='Chirper.deleteFriend(" + i + ")'><i class='fa fa-minus'></i></div></td></tr>";
     }
     document.getElementById('userFriends').innerHTML = h;
 }
