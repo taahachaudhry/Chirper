@@ -122,15 +122,27 @@ Chirper.createProfile = function () {
 };
 
 Chirper.readProfile = function () {
-    Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, 'profile'), null, function (data) {
-        for (var i in data) {
-            var profile = data[i];
-            profile.__proto__ = Chirper.Profile.prototype;
-            profile.key = i;
-            Chirper.user.push(profile);
-        }
-        Chirper.displayProfile();
-    });
+    if (Chirper.Profile.isMyProfile) {
+        Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, 'profile'), null, function (data) {
+            for (var i in data) {
+                var profile = data[i];
+                profile.__proto__ = Chirper.Profile.prototype;
+                profile.key = i;
+                Chirper.user.push(profile);
+            }
+            Chirper.displayProfile();
+        });
+    } else {
+        Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, 'profile'), null, function (data) {
+            for (var i in data) {
+                var profile = data[i];
+                profile.__proto__ = Chirper.Profile.prototype;
+                profile.key = i;
+                Chirper.user.push(profile);
+            }
+            Chirper.displayProfile();
+        });
+    }
 };
 Chirper.editProfile = function (index) {
     Chirper.user[index].editing = true;
@@ -246,6 +258,7 @@ Chirper.friendsProfile = function (index) {
     Chirper.read();
     Chirper.output();
     Chirper.user = [];
+    Chirper.readProfile();
 }
 /*************** END USER FRIENDS ****************/
 
