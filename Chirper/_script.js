@@ -16,8 +16,8 @@ Chirper.Chirp.prototype.editing = false;
 Chirper.create = function () {
     var name = Chirper.user[0].name;
     var message = document.getElementById('chirp');
-
     var chirp = new Chirper.Chirp(name, message.value);
+
     Chirper.ajax("POST", Chirper.urlHelper(Chirper.base, "chirps"), chirp, function (data) {
         chirp.key = data.name;
         Chirper.chirps.push(chirp);
@@ -27,15 +27,28 @@ Chirper.create = function () {
 };
 
 Chirper.read = function () {
-    Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, 'chirps'), null, function (data) {
-        for (var i in data) {
-            var chirp = data[i];
-            chirp.__proto__ = Chirper.Chirp.prototype;
-            chirp.key = i;
-            Chirper.chirps.push(chirp)
-        }
-        Chirper.output();
-    });
+    if (Chirper.Profile.isMyProfile) {
+        Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, 'chirps'), null, function (data) {
+            for (var i in data) {
+                var chirp = data[i];
+                chirp.__proto__ = Chirper.Chirp.prototype;
+                chirp.key = i;
+                Chirper.chirps.push(chirp)
+            }
+            Chirper.output();
+        });
+    } else {
+        Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, 'chirps'), null, function (data) {
+            for (var i in data) {
+                var chirp = data[i];
+                chirp.__proto__ = Chirper.Chirp.prototype;
+                chirp.key = i;
+                Chirper.chirps.push(chirp)
+            }
+            Chirper.output();
+        });
+    }
+
 };
 Chirper.edit = function (index) {
     Chirper.chirps[index].editing = true;
@@ -221,6 +234,9 @@ Chirper.friendsTable = function () {
 Chirper.friendsProfile = function (index) {
     Chirper.base = Chirper.friends[index].base;
     Chirper.Profile.prototype.isMyProfile = false;
+    Chirper.chirps = [];
+    Chirper.read();
+    Chirper.user = [];
 }
 /*************** END USER FRIENDS ****************/
 
