@@ -171,7 +171,7 @@ Chirper.displayProfile = function () {
     var h = '<table class="table table-striped table-bordered"></table>'    
     if (Chirper.user.length === 0) {
         document.getElementById('clearLogin');
-    } else {
+    } else if (Chirper.base === 'htcchirper') {
         document.getElementById('clearLogin').innerHTML = '';
         h += '<tbody><tr>';
         for (var i in Chirper.user) {
@@ -188,9 +188,14 @@ Chirper.displayProfile = function () {
                 h += "<td><div class='btn btn-primary btn-sm center-block' onclick='Chirper.timeline()'>Timeline</div></td>";
             }
         }
-        h += "</tbody></tr>"
-        document.getElementById('clearLogin').innerHTML = h;
+    } else {
+        for (var i in Chirper.user) {
+            h += "<td><img src='" + Chirper.user[i].image + "' class='img-thumbnail img-responsive center-block' style='height:200px; width:200px;'/><td>"
+            h += '<td><h3 style="text-align:center">' + Chirper.user[i].name + '</h3></td><td><h5 style="text-align:center"> ' + Chirper.user[i].bio + '</h5></td>';
+        }
     }
+    h += "</tbody></tr>"
+    document.getElementById('clearLogin').innerHTML = h;
 };
 /*************** END USER PROFILE ****************/
 
