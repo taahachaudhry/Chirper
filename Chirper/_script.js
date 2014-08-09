@@ -169,14 +169,15 @@ Chirper.Friend = function (name, base) {
 
 //Add friend
 Chirper.addFriend = function () {
+    console.log("hi")
     var friendBase = document.getElementById('base').value;
     console.log(friendBase);
     Chirper.ajax("GET", Chirper.urlHelper(friendBase,"profile"), null, function (data) {
         for (var i in data) {
             console.log(data[i].name);
-            var friend = new Chirper.Friend(data[i].name, friendBase);
-            friend.key = i;
+            var friend = new Chirper.Friend(data[i].name, friendBase);    
             friend.__proto__ = Chirper.Friend.prototype;
+            friend.key = i;
             Chirper.friends.push(friend);
         }
         Chirper.sendFriend(friend);
@@ -184,9 +185,30 @@ Chirper.addFriend = function () {
 }
 //Send friend to firebase
 Chirper.sendFriend = function (friend) {
-    Chirper.ajax("POST", Chirper.urlHelper(Chirper.base, "friends"), friend, function () {
-        console.log("successful");
+    Chirper.ajax("POST", Chirper.urlHelper(Chirper.base, "friends"), friend, function (data) {
+        Chirper.friendsTable();
     })
+}
+//Grab friends from firebase
+Chirper.getFriends = function () {
+    Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, "friends"), null, function (data) {
+        for (var i in data) {
+            var friend = data[i];
+            friend.__proto__ = Chirper.Friend.prototype;
+            friend.key = i;
+            Chirper.friends.push(friend);
+        }
+        Chirper.friendsTable();
+    })
+}
+//Table to display friends on profile
+Chirper.friendsTable = function () {
+    var h = '<thead><tr><th style="text-align:center">Friends</th></tr></thead>';
+    h += "<tbody><tr><td><div class='form-inline'><input type='text' id='base' class='form-control' placeholder='Name' />  <button class='btn btn-primary btn-sm' onclick='Chirper.addFriend();'><i class='fa fa-plus'></i></button></div></td></tr></tbody>";
+    for (var i in Chirper.friends) {
+        h+="<tr><td><a onclick=''>"+Chirper.friends[i].name+"</a></td></tr>"
+    }
+    document.getElementById('userFriends').innerHTML = h;
 }
 /*************** END USER FRIENDS ****************/
 
@@ -227,3 +249,4 @@ Chirper.ajax = function (method, url, data, success, error) {
 //Read onload
 Chirper.read();
 Chirper.readProfile();
+Chirper.getFriends();
