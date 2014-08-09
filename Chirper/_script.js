@@ -224,19 +224,31 @@ Chirper.addFriend = function () {
 Chirper.sendFriend = function (friend) {
     Chirper.ajax("POST", Chirper.urlHelper(Chirper.base, "friends"), friend, function (data) {
         Chirper.friendsTable();
-    })
+    });
 }
 //Grab friends from firebase
 Chirper.getFriends = function () {
-    Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, "friends"), null, function (data) {
-        for (var i in data) {
-            var friend = data[i];
-            friend.__proto__ = Chirper.Friend.prototype;
-            friend.key = i;
-            Chirper.friends.push(friend);
-        }
-        Chirper.friendsTable();
-    })
+    if (Chirper.Profile.isMyProfile) {
+        Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, "friends"), null, function (data) {
+            for (var i in data) {
+                var friend = data[i];
+                friend.__proto__ = Chirper.Friend.prototype;
+                friend.key = i;
+                Chirper.friends.push(friend);
+            }
+            Chirper.friendsTable();
+        });
+    } else {
+        Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, "friends"), null, function (data) {
+            for (var i in data) {
+                var friend = data[i];
+                friend.__proto__ = Chirper.Friend.prototype;
+                friend.key = i;
+                Chirper.friends.push(friend);
+            }
+            Chirper.friendsTable();
+        });
+    }
 }
 
 Chirper.deleteFriend = function (index) {
@@ -247,10 +259,16 @@ Chirper.deleteFriend = function (index) {
 //Table to display friends on profile
 Chirper.friendsTable = function () {
     var h = '<thead><tr><th style="text-align:center">Friends</th></tr></thead>';
-    h += "<tbody><tr><td><div class='form-inline'><input type='text' id='base' class='form-control' placeholder='Name' />  <button class='btn btn-primary btn-xs' onclick='Chirper.addFriend();'><i class='fa fa-plus'></i></button></div></td></tr></tbody>";
-    for (var i in Chirper.friends) {
-        h += "<tr><td><a onclick='Chirper.friendsProfile("+i+");'>" + Chirper.friends[i].name + "</a></td>";
-        h += "<td><div class='btn btn-danger btn-xs' onclick='Chirper.deleteFriend(" + i + ")'><i class='fa fa-minus'></i></div></td></tr>";
+    if (Chirper.base === 'htcchirper') {
+        h += "<tbody><tr><td><div class='form-inline'><input type='text' id='base' class='form-control' placeholder='Name' />  <button class='btn btn-primary btn-xs' onclick='Chirper.addFriend();'><i class='fa fa-plus'></i></button></div></td></tr></tbody>";
+        for (var i in Chirper.friends) {
+            h += "<tr><td><a onclick='Chirper.friendsProfile(" + i + ");'>" + Chirper.friends[i].name + "</a></td>";
+            h += "<td><div class='btn btn-danger btn-xs' onclick='Chirper.deleteFriend(" + i + ")'><i class='fa fa-minus'></i></div></td></tr>";
+        }
+    } else {
+        for (var i in Chirper.friends) {
+            h += "<tbody><tr><td><a onclick='Chirper.friendsProfile(" + i + ");'>" + Chirper.friends[i].name + "</a></td>";
+        }
     }
     document.getElementById('userFriends').innerHTML = h;
 }
@@ -261,9 +279,10 @@ Chirper.friendsProfile = function (index) {
     Chirper.Profile.prototype.isMyProfile = false;
     Chirper.chirps = [];
     Chirper.read();
-    Chirper.output();
     Chirper.user = [];
     Chirper.readProfile();
+    Chirper.friends=[];
+    Chirper.getFriends();
 }
 /*************** END USER FRIENDS ****************/
 
