@@ -128,27 +128,15 @@ Chirper.createProfile = function () {
 };
 
 Chirper.readProfile = function () {
-    if (Chirper.Profile.isMyProfile) {
-        Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, 'profile'), null, function (data) {
-            for (var i in data) {
-                var profile = data[i];
-                profile.__proto__ = Chirper.Profile.prototype;
-                profile.key = i;
-                Chirper.user.push(profile);
-            }
-            Chirper.displayProfile();
-        });
-    } else {
-        Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, 'profile'), null, function (data) {
-            for (var i in data) {
-                var profile = data[i];
-                profile.__proto__ = Chirper.Profile.prototype;
-                profile.key = i;
-                Chirper.user.push(profile);
-            }
-            Chirper.displayProfile();
-        });
-    }
+    Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, 'profile'), null, function (data) {
+        for (var i in data) {
+            var profile = data[i];
+            profile.__proto__ = Chirper.Profile.prototype;
+            profile.key = i;
+            Chirper.user.push(profile);
+        }
+        Chirper.displayProfile();
+    });
 };
 Chirper.editProfile = function (index) {
     Chirper.user[index].editing = true;
@@ -377,7 +365,7 @@ Chirper.initialize = function () {
     Chirper.chirps = [];
     Chirper.friends = [];
     Chirper.read();
-Chirper.readProfile();
+    Chirper.readProfile();
     Chirper.getFriends();
 }
 Chirper.initialize();
