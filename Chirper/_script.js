@@ -14,16 +14,20 @@ Chirper.Chirp.prototype.editing = false;
 
 //CRUD functions with AJAX call to Firebase
 Chirper.create = function () {
-    var name = Chirper.user[0].name;
-    var message = document.getElementById('chirp');
-    var chirp = new Chirper.Chirp(name, message.value);
+    if (Chirper.user.length === 0) {
+        alert("Please create a profile to chirp!")
+    } else {
+        var name = Chirper.user[0].name;
+        var message = document.getElementById('chirp');
+        var chirp = new Chirper.Chirp(name, message.value);
 
-    Chirper.ajax("POST", Chirper.urlHelper(Chirper.base, "chirps"), chirp, function (data) {
-        chirp.key = data.name;
-        Chirper.chirps.push(chirp);
-        message.value = '';
-        Chirper.output();
-    })
+        Chirper.ajax("POST", Chirper.urlHelper(Chirper.base, "chirps"), chirp, function (data) {
+            chirp.key = data.name;
+            Chirper.chirps.push(chirp);
+            message.value = '';
+            Chirper.output();
+        })
+   } 
 };
 
 Chirper.read = function () {
@@ -77,7 +81,9 @@ Chirper.output = function () {
                 h += "<textarea id='editChirp' class='form-control'>" + Chirper.chirps[i].message + "</textarea>";
                 h += "<div class='btn btn-success btn-xs' onclick='Chirper.save(" + i + ")'><i class='fa fa-edit'></i></div>";
             } else {
+                
                 h += "<tbody><tr>"
+                
                 h += '<td><h4> "' + Chirper.chirps[i].message + '"</h4><h6> –' + Chirper.chirps[i].name + '</h6></td>';
                 h += "<td><div class='btn btn-warning btn-sm' style='margin-top:20px' onclick='Chirper.edit(" + i + ")'><i class='fa fa-edit'></i></div></td>";
                 h += "<td><div class='btn btn-danger btn-sm' style='margin-top:20px' onclick='Chirper.delete(" + i + ")'><span class='glyphicon glyphicon-remove'></div></td>";
@@ -169,9 +175,9 @@ Chirper.deleteProfile = function (index) {
 //Table displaying profile
 Chirper.displayProfile = function () {
     var h = '<table class="table table-striped table-bordered"></table>'    
-    if (Chirper.user.length === 0) {
+    if (Chirper.user.length === 0) {        
         document.getElementById('clearLogin');
-    } else if (Chirper.base === 'htcchirper') {
+    } else if (Chirper.user.length===1&&Chirper.base === 'htcchirper') {
         document.getElementById('clearLogin').innerHTML = '';
         h += '<tbody><tr>';
         for (var i in Chirper.user) {
