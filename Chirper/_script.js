@@ -79,11 +79,9 @@ Chirper.output = function () {
         for (var i in Chirper.chirps) {
             if (Chirper.chirps[i].editing) {
                 h += "<textarea id='editChirp' class='form-control'>" + Chirper.chirps[i].message + "</textarea>";
-                h += "<div class='btn btn-success btn-xs' onclick='Chirper.save(" + i + ")'><i class='fa fa-edit'></i></div>";
-            } else {
-                
-                h += "<tbody><tr>"
-                
+                h += "<div class='btn btn-success btn-xs' onclick='Chirper.save(" + i + ")'><i class='fa fa-save'></i></div>";
+            } else {                
+                h += "<tbody><tr>"                
                 h += '<td><h4> "' + Chirper.chirps[i].message + '"</h4><h6> –' + Chirper.chirps[i].name + '</h6></td>';
                 h += "<td><div class='btn btn-warning btn-sm' style='margin-top:20px' onclick='Chirper.edit(" + i + ")'><i class='fa fa-edit'></i></div></td>";
                 h += "<td><div class='btn btn-danger btn-sm' style='margin-top:20px' onclick='Chirper.delete(" + i + ")'><span class='glyphicon glyphicon-remove'></div></td>";
@@ -189,9 +187,9 @@ Chirper.displayProfile = function () {
             } else {
                 h += "<td><img src='" + Chirper.user[i].image + "' class='img-thumbnail img-responsive center-block' style='height:200px; width:200px;'/><td>"
                 h += '<td><h3 style="text-align:center">' + Chirper.user[i].name + '</h3></td><td><h5 style="text-align:center"> ' + Chirper.user[i].bio + '</h5></td>';
-                h += "<td><div style='margin-bottom:5px' class='btn btn-warning btn-sm center-block' onclick='Chirper.editProfile(" + i + ")'><i class='fa fa-edit'></i></div></td>";
-                h += "<td><div style='margin-bottom:5px' class='btn btn-danger btn-sm center-block' onclick='Chirper.deleteProfile(" + i + ")'><i class='fa fa-minus'></i></div></td>";
-                h += "<td><div class='btn btn-primary btn-sm center-block' onclick='Chirper.timeline()'>Timeline</div></td>";
+                h += "<td><div style='margin-bottom:5px' class='btn btn-warning btn-sm center-block' onclick='Chirper.editProfile(" + i + ")'>Edit  <i class='fa fa-edit'></i></div></td>";
+                h += "<td><div style='margin-bottom:5px' class='btn btn-danger btn-sm center-block' onclick='Chirper.deleteProfile(" + i + ")'>Delete  <i class='fa fa-minus'></i></div></td>";
+                h += "<td><div class='btn btn-primary btn-sm center-block' data-toggle='modal' data-target='#myModal' onclick='Chirper.timeline()'>Timeline</div></td>";
             }
         }
     } else {
