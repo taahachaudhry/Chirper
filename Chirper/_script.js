@@ -310,9 +310,10 @@ Chirper.timeline = function () {
                 Chirper.timelineArray.push(data[x]);         
             }
             Chirper.timelineArray.sort(Chirper.sortChirps);
-            Chirper.drawTimeline();           
+            Chirper.drawTimeline();            
         });        
     }
+    setTimeout(Chirper.timeline, 30000);
 }
 
 Chirper.sortChirps = function (a,b) {
