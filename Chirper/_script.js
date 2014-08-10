@@ -214,47 +214,53 @@ Chirper.Friend = function (name, base) {
 }
 
 //Add friend
-Chirper.addFriend = function () {
-    var friendBase = document.getElementById('base').value;
-    Chirper.ajax("GET", Chirper.urlHelper(friendBase, "profile"), null, function (data) {
+Chirper.addFriend = function (base) {
+    if (Chirper.Profile.isMyProfile) {
+        var friendBase = document.getElementById('base').value;
+        Chirper.ajax("GET", Chirper.urlHelper(friendBase, "profile"), null, function (data) {
+            for (var i in data) {
+                var friend = new Chirper.Friend(data[i].name, friendBase);
+                friend.__proto__ = Chirper.Friend.prototype;
+                friend.key = i;
+                Chirper.friends.push(friend);
+            }
+            Chirper.sendFriend(friend);
+        }, function () { console.log("error"); });
+    } else {
+        Chirper.ajax("GET", Chirper.urlHelper(base, "profile"), null, function (data) {
+            for (var i in data) {
+                var friend = new Chirper.Friend(data[i].name, base);
+                friend.__proto__ = Chirper.Friend.prototype;
+                friend.key = i;
+                Chirper.friends.push(friend);
+            }
+            Chirper.sendFriend(friend);
+        }, function () { console.log("error"); });
+    }
+}
+//Send friend to firebase
+Chirper.sendFriend = function (friend) {
+    if (Chirper.Profile.isMyProfile) {
+        Chirper.ajax("POST", Chirper.urlHelper("htcchirper", "friends"), friend, function (data) {
+            Chirper.friendsTable();
+        });
+    } else {
+        Chirper.ajax("POST", Chirper.urlHelper("htcchirper", "friends"), friend, function (data) {
+            history.go(0);
+        });
+    }
+}
+//Grab friends from firebase
+Chirper.getFriends = function () {
+    Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, "friends"), null, function (data) {
         for (var i in data) {
-            var friend = new Chirper.Friend(data[i].name, friendBase);
+            var friend = data[i];
             friend.__proto__ = Chirper.Friend.prototype;
             friend.key = i;
             Chirper.friends.push(friend);
         }
-        Chirper.sendFriend(friend);
-    }, function () { console.log("error"); });
-}
-//Send friend to firebase
-Chirper.sendFriend = function (friend) {
-    Chirper.ajax("POST", Chirper.urlHelper(Chirper.base, "friends"), friend, function (data) {
         Chirper.friendsTable();
     });
-}
-//Grab friends from firebase
-Chirper.getFriends = function () {
-    if (Chirper.Profile.isMyProfile) {
-        Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, "friends"), null, function (data) {
-            for (var i in data) {
-                var friend = data[i];
-                friend.__proto__ = Chirper.Friend.prototype;
-                friend.key = i;
-                Chirper.friends.push(friend);
-            }
-            Chirper.friendsTable();
-        });
-    } else {
-        Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, "friends"), null, function (data) {
-            for (var i in data) {
-                var friend = data[i];
-                friend.__proto__ = Chirper.Friend.prototype;
-                friend.key = i;
-                Chirper.friends.push(friend);
-            }
-            Chirper.friendsTable();
-        });
-    }
 }
 
 Chirper.deleteFriend = function (index) {
@@ -274,6 +280,7 @@ Chirper.friendsTable = function () {
     } else {
         for (var i in Chirper.friends) {
             h += "<tbody><tr><td><a onclick='Chirper.friendsProfile(" + i + ");'>" + Chirper.friends[i].name + "</a></td>";
+            h += "<td><div class='btn btn-primary btn-xs' onclick='Chirper.addFriend(&quot;"+Chirper.friends[i].base+"&quot;);'><i class='fa fa-plus'></i></div></td></tr>";
         }
     }
     document.getElementById('userFriends').innerHTML = h;
@@ -368,10 +375,9 @@ Chirper.ajax = function (method, url, data, success, error) {
 //Read onload
 Chirper.initialize = function () {
     Chirper.chirps = [];
-    Chirper.user = [];
     Chirper.friends = [];
     Chirper.read();
-    Chirper.readProfile();
+Chirper.readProfile();
     Chirper.getFriends();
 }
 Chirper.initialize();
