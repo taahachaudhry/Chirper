@@ -27,7 +27,7 @@ Chirper.create = function () {
             message.value = '';
             Chirper.output();
         })
-   } 
+    }
 };
 
 Chirper.read = function () {
@@ -69,7 +69,7 @@ Chirper.save = function (index) {
     });
 };
 Chirper.delete = function (index) {
-    Chirper.ajax("DELETE", Chirper.urlHelper(Chirper.base, "chirps", Chirper.chirps[index].key), null, function () { Chirper.chirps.splice(index,1); Chirper.output();})
+    Chirper.ajax("DELETE", Chirper.urlHelper(Chirper.base, "chirps", Chirper.chirps[index].key), null, function () { Chirper.chirps.splice(index, 1); Chirper.output(); })
 };
 
 //Table outputting chirps
@@ -80,8 +80,8 @@ Chirper.output = function () {
             if (Chirper.chirps[i].editing) {
                 h += "<textarea id='editChirp' class='form-control'>" + Chirper.chirps[i].message + "</textarea>";
                 h += "<div class='btn btn-success btn-xs' onclick='Chirper.save(" + i + ")'><i class='fa fa-save'></i></div>";
-            } else {                
-                h += "<tbody><tr>"                
+            } else {
+                h += "<tbody><tr>"
                 h += '<td><h4> "' + Chirper.chirps[i].message + '"</h4><h6> –' + Chirper.chirps[i].name + ', ' + new Date(Chirper.chirps[i].timestamp).toLocaleString(); +'</h6></td>';
                 h += "<td><div class='btn btn-warning btn-sm' style='margin-top:20px' onclick='Chirper.edit(" + i + ")'><i class='fa fa-edit'></i></div></td>";
                 h += "<td><div class='btn btn-danger btn-sm' style='margin-top:20px' onclick='Chirper.delete(" + i + ")'><span class='glyphicon glyphicon-remove'></div></td>";
@@ -166,23 +166,23 @@ Chirper.saveProfile = function (index) {
 };
 Chirper.deleteProfile = function (index) {
     Chirper.ajax("DELETE", Chirper.urlHelper(Chirper.base, "profile", Chirper.user[index].key), null, function () {
-        Chirper.user.splice(index, 1); Chirper.displayProfile(); 
+        Chirper.user.splice(index, 1); Chirper.displayProfile();
     })
 };
 
 //Table displaying profile
 Chirper.displayProfile = function () {
-    var h = '<table class="table table-striped table-bordered"></table>'    
-    if (Chirper.user.length === 0) {        
+    var h = '<table class="table table-striped table-bordered"></table>'
+    if (Chirper.user.length === 0) {
         document.getElementById('clearLogin');
-    } else if (Chirper.user.length===1&&Chirper.base === 'htcchirper') {
+    } else if (Chirper.user.length === 1 && Chirper.base === 'htcchirper') {
         document.getElementById('clearLogin').innerHTML = '';
         h += '<tbody><tr>';
         for (var i in Chirper.user) {
             if (Chirper.user[i].editing) {
                 h += "<td><input type='text' id='editName' class='form-control' value='" + Chirper.user[i].name + "'/></td><br>";
                 h += "<td><input type='text' id='editImg' class='form-control' value='" + Chirper.user[i].image + "'/></td><br>";
-                h += "<td><textarea id='editBio' class='form-control'>"+ Chirper.user[i].bio + "</textarea></td><br>";
+                h += "<td><textarea id='editBio' class='form-control'>" + Chirper.user[i].bio + "</textarea></td><br>";
                 h += "<td><div style='margin-bottom:5px' class='btn btn-success btn-sm center-block' onclick='Chirper.saveProfile(" + i + ")'><i class='fa fa-save'></i></div></td>";
             } else {
                 h += "<td><img src='" + Chirper.user[i].image + "' class='img-thumbnail img-responsive center-block' style='height:200px; width:200px;'/><td>"
@@ -214,15 +214,15 @@ Chirper.Friend = function (name, base) {
 //Add friend
 Chirper.addFriend = function () {
     var friendBase = document.getElementById('base').value;
-    Chirper.ajax("GET", Chirper.urlHelper(friendBase,"profile"), null, function (data) {
+    Chirper.ajax("GET", Chirper.urlHelper(friendBase, "profile"), null, function (data) {
         for (var i in data) {
-            var friend = new Chirper.Friend(data[i].name, friendBase);    
+            var friend = new Chirper.Friend(data[i].name, friendBase);
             friend.__proto__ = Chirper.Friend.prototype;
             friend.key = i;
             Chirper.friends.push(friend);
         }
         Chirper.sendFriend(friend);
-    }, function(){ console.log("error");});
+    }, function () { console.log("error"); });
 }
 //Send friend to firebase
 Chirper.sendFriend = function (friend) {
@@ -285,7 +285,7 @@ Chirper.friendsProfile = function (index) {
     Chirper.read();
     Chirper.user = [];
     Chirper.readProfile();
-    Chirper.friends=[];
+    Chirper.friends = [];
     Chirper.getFriends();
 }
 /*************** END USER FRIENDS ****************/
@@ -304,19 +304,19 @@ Chirper.timeline = function () {
     //sort array and display
     for (var i in Chirper.friends) {
         //to grab tweets use base to make an ajax call to their messages       
-        Chirper.ajax("GET", Chirper.urlHelper(Chirper.friends[i].base, "chirps"), null, function (data) {          
+        Chirper.ajax("GET", Chirper.urlHelper(Chirper.friends[i].base, "chirps"), null, function (data) {
             for (var x in data) {
                 data[x].key = x;
-                Chirper.timelineArray.push(data[x]);         
+                Chirper.timelineArray.push(data[x]);
             }
             Chirper.timelineArray.sort(Chirper.sortChirps);
-            Chirper.drawTimeline();            
-        });        
+            Chirper.drawTimeline();
+        });
     }
     setTimeout(Chirper.timeline, 30000);
 }
 
-Chirper.sortChirps = function (a,b) {
+Chirper.sortChirps = function (a, b) {
     return a.timestamp - b.timestamp;
 };
 Chirper.drawTimeline = function () {
@@ -336,7 +336,7 @@ Chirper.urlHelper = function (base) {
         url += arguments[i] + '/'
     }
     if (base === 'htcchirper') {
-        return url + ".json?auth="+ChirperKey.fb_key;
+        return url + ".json?auth=" + ChirperKey.fb_key;
     } else {
         return url + ".json";
     }
@@ -364,6 +364,12 @@ Chirper.ajax = function (method, url, data, success, error) {
     }
 }
 //Read onload
-Chirper.read();
-Chirper.readProfile();
-Chirper.getFriends();
+Chirper.initialize = function () {
+    Chirper.chirps = [];
+    Chirper.user = [];
+    Chirper.friends = [];
+    Chirper.read();
+    Chirper.readProfile();
+    Chirper.getFriends();
+}
+Chirper.initialize();
