@@ -309,11 +309,15 @@ Chirper.timeline = function () {
                 data[x].key = x;
                 Chirper.timelineArray.push(data[x]);         
             }
+            Chirper.timelineArray.sort(Chirper.sortChirps);
             Chirper.drawTimeline();           
         });        
     }
 }
 
+Chirper.sortChirps = function (a,b) {
+    return a.timestamp - b.timestamp;
+};
 Chirper.drawTimeline = function () {
     var h = "<tbody>";
     for (var i in Chirper.timelineArray) {
