@@ -319,7 +319,7 @@ Chirper.timeline = function () {
 }
 
 Chirper.sortChirps = function (a, b) {
-    return a.timestamp - b.timestamp;
+    return b.timestamp - a.timestamp;
 };
 Chirper.drawTimeline = function () {
     var h = "<tbody>";
