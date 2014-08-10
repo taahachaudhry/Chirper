@@ -82,7 +82,7 @@ Chirper.output = function () {
                 h += "<div class='btn btn-success btn-xs' onclick='Chirper.save(" + i + ")'><i class='fa fa-save'></i></div>";
             } else {                
                 h += "<tbody><tr>"                
-                h += '<td><h4> "' + Chirper.chirps[i].message + '"</h4><h6> –' + Chirper.chirps[i].name + '</h6></td>';
+                h += '<td><h4> "' + Chirper.chirps[i].message + '"</h4><h6> –' + Chirper.chirps[i].name + ', ' + new Date(Chirper.chirps[i].timestamp).toLocaleString(); +'</h6></td>';
                 h += "<td><div class='btn btn-warning btn-sm' style='margin-top:20px' onclick='Chirper.edit(" + i + ")'><i class='fa fa-edit'></i></div></td>";
                 h += "<td><div class='btn btn-danger btn-sm' style='margin-top:20px' onclick='Chirper.delete(" + i + ")'><span class='glyphicon glyphicon-remove'></div></td>";
             }
@@ -322,7 +322,7 @@ Chirper.sortChirps = function (a,b) {
 Chirper.drawTimeline = function () {
     var h = "<tbody>";
     for (var i in Chirper.timelineArray) {
-        h += '<tr><td><h4> "' + Chirper.timelineArray[i].message + '"</h4><h6> –' + Chirper.timelineArray[i].name+', '+ Chirper.timelineArray[i].timestamp + '</h6></td></tr>';
+        h += '<tr><td><h4> "' + Chirper.timelineArray[i].message + '"</h4><h6> –' + Chirper.timelineArray[i].name + ', ' + new Date(Chirper.timelineArray[i].timestamp).toLocaleString(); + '</h6></td></tr>';
     }
     h += "</tbody>";
     document.getElementById('timeline').innerHTML = h;
