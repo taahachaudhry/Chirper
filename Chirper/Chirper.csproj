@@ -80,6 +80,7 @@
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.9.0.min.js" />
+    <Content Include="stylesheet.css" />
     <Content Include="Web.config" />
     <Content Include="_authtoken.js" />
     <Content Include="_script.js" />

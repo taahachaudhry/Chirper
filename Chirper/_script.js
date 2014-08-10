@@ -39,6 +39,7 @@ Chirper.read = function () {
                 chirp.key = i;
                 Chirper.chirps.push(chirp)
             }
+            Chirper.chirps.sort(Chirper.sortChirps);
             Chirper.output();
         });
     } else {
@@ -49,6 +50,7 @@ Chirper.read = function () {
                 chirp.key = i;
                 Chirper.chirps.push(chirp)
             }
+            Chirper.chirps.sort(Chirper.sortChirps);
             Chirper.output();
         });
     }
