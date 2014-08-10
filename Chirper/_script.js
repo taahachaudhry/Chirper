@@ -291,21 +291,37 @@ Chirper.friendsProfile = function (index) {
 /*************** END USER FRIENDS ****************/
 
 /*************** TIMELINE ****************/
+Chirper.timelineArray = [];
+Chirper.FriendsChirps = function (name, message, timestamp) {
+    this.name = name;
+    this.message = message;
+    this.timestamp = timestamp;
+}
 Chirper.timeline = function () {
+    Chirper.timelineArray = [];
     //loops through my friends array
     //grab tweets from each friend and put in an array
     //sort array and display
     for (var i in Chirper.friends) {
-        //to grab tweets use base to make an ajax call to their messages
-        //console.log(Chirper.friends[i].base);
-        Chirper.ajax("GET", Chirper.urlHelper(Chirper.friends[i].base, "chirps"), null, function (data) {
-            for (var i in data) {
-                console.log(data[i].message);
+        //to grab tweets use base to make an ajax call to their messages       
+        Chirper.ajax("GET", Chirper.urlHelper(Chirper.friends[i].base, "chirps"), null, function (data) {          
+            for (var x in data) {
+                data[x].key = x;
+                Chirper.timelineArray.push(data[x]);         
             }
-        });
+            Chirper.drawTimeline();           
+        });        
     }
 }
 
+Chirper.drawTimeline = function () {
+    var h = "<tbody>";
+    for (var i in Chirper.timelineArray) {
+        h += '<tr><td><h4> "' + Chirper.timelineArray[i].message + '"</h4><h6> –' + Chirper.timelineArray[i].name+', '+ Chirper.timelineArray[i].timestamp + '</h6></td></tr>';
+    }
+    h += "</tbody>";
+    document.getElementById('timeline').innerHTML = h;
+}
 /*************** END TIMELINE ****************/
 
 //URL Helper for Firebase
