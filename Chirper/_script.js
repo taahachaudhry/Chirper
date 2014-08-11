@@ -129,14 +129,17 @@ Chirper.createProfile = function () {
 
 Chirper.readProfile = function () {
     Chirper.ajax("GET", Chirper.urlHelper(Chirper.base, 'profile'), null, function (data) {
-        for (var i in data) {
-            var profile = data[i];
-            profile.__proto__ = Chirper.Profile.prototype;
-            profile.key = i;
-            Chirper.user.push(profile);
-        }
-        Chirper.displayProfile();
-    });
+        if (data){
+            for (var i in data) {
+            
+                var profile = data[i];
+                profile.__proto__ = Chirper.Profile.prototype;
+                profile.key = i;
+                Chirper.user.push(profile);
+            }
+            Chirper.displayProfile();
+    }
+        });
 };
 Chirper.editProfile = function (index) {
     Chirper.user[index].editing = true;
@@ -284,6 +287,7 @@ Chirper.friendsProfile = function (index) {
     Chirper.readProfile();
     Chirper.friends = [];
     Chirper.getFriends();
+    console.log("success")
 }
 /*************** END USER FRIENDS ****************/
 
@@ -341,7 +345,7 @@ Chirper.urlHelper = function (base) {
 //AJAX Call Function
 Chirper.ajax = function (method, url, data, success, error) {
     var request = new XMLHttpRequest();
-    request.open(method, url);
+    request.open(method, url, false);
     request.onload = function () {
         if (this.status >= 200 && this.status < 400) {
             success(JSON.parse(this.response));
